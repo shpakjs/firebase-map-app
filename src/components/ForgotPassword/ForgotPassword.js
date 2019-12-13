@@ -1,9 +1,8 @@
 import React from 'react';
-import { Field, Form } from 'react-final-form';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import RFTextField from '@material-ui/core/TextField';
-import FormButton from '@material-ui/core/Button';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 
 const useStyles = makeStyles(theme => ({
   form: {
@@ -12,19 +11,11 @@ const useStyles = makeStyles(theme => ({
   button: {
     marginTop: theme.spacing(3),
     marginBottom: theme.spacing(2),
-  },
-  feedback: {
-    marginTop: theme.spacing(2),
-  },
+  }
 }));
 
 function ForgotPassword() {
   const classes = useStyles();
-  const [sent, setSent] = React.useState(false);
-
-  const handleSubmit = () => {
-    setSent(true);
-  };
 
   return (
     <React.Fragment>
@@ -37,33 +28,27 @@ function ForgotPassword() {
               'send you a link to reset your password.'}
           </Typography>
         </React.Fragment>
-        <Form onSubmit={handleSubmit} subscription={{ submitting: true }} >
-          {({ handleSubmit2, submitting }) => (
-            <form onSubmit={handleSubmit2} className={classes.form} noValidate>
-              <Field
-                autoFocus
-                autoComplete="email"
-                component={RFTextField}
-                disabled={submitting || sent}
-                fullWidth
-                label="Email"
+            <form className={classes.form} noValidate>
+                <TextField
+                variant="outlined"
                 margin="normal"
-                name="email"
                 required
-                size="large"
-              />
-              <FormButton
-                className={classes.button}
-                disabled={submitting || sent}
-                size="large"
-                color="secondary"
                 fullWidth
-              >
-                {submitting || sent ? 'In progress…' : 'Send reset link'}
-              </FormButton>
+                name="email"
+                label="Email"
+                type="email"
+                id="email"
+                />
+                <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                >
+                Sign In
+                </Button>
             </form>
-          )}
-        </Form>
     </React.Fragment>
   );
 }

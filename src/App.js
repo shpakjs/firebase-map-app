@@ -11,6 +11,7 @@ import HomePage from './components/Home/Home';
 import AccountPage from './components/Account/Account';
 import AdminPage from './components/Admin/Admin';
 import * as ROUTES from './constants/routes';
+
 const App = () => (
   <Router>
     <div>
