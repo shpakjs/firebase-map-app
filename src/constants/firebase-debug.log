@@ -1,0 +1,21 @@
+[debug] [2019-12-13T13:11:50.827Z] ----------------------------------------------------------------------
+[debug] [2019-12-13T13:11:50.830Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\iushp\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2019-12-13T13:11:50.831Z] CLI Version:   7.10.0
+[debug] [2019-12-13T13:11:50.831Z] Platform:      win32
+[debug] [2019-12-13T13:11:50.831Z] Node Version:  v10.16.0
+[debug] [2019-12-13T13:11:50.832Z] Time:          Fri Dec 13 2019 15:11:50 GMT+0200 (Eastern European Standard Time)
+[debug] [2019-12-13T13:11:50.832Z] ----------------------------------------------------------------------
+[debug] [2019-12-13T13:11:50.832Z] 
+[debug] [2019-12-13T13:11:50.842Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-12-13T13:11:50.843Z] > authorizing via signed-in user
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\iushp\shpakjs\firebase-map-app\src\constants
+
