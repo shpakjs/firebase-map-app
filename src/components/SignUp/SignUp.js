@@ -8,42 +8,11 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import { withFirebase } from '../../hoc/withFirebase';
+import { withFirebase } from '../Firebase/context';
 import { Link, withRouter } from 'react-router-dom';
 import * as ROUTES from '../../constants/routes';
 import { compose } from 'recompose';
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    height: '100vh',
-  },
-  image: {
-    backgroundImage: 'url(https://source.unsplash.com/random)',
-    backgroundRepeat: 'no-repeat',
-    backgroundColor:
-      theme.palette.type === 'dark' ? theme.palette.grey[900] : theme.palette.grey[50],
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-  },
-  paper: {
-    margin: theme.spacing(8, 4),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
-
+import styles from './SignUp.module.css';
 
 const SignUp = () => (
     <div>
@@ -60,35 +29,38 @@ const INITIAL_STATE = {
     error: null,
   };
 
-const SignUpForm = compose(
-    withRouter,
-    withFirebase,
-  )(SignUpFormBase);
-
 class SignUpFormBase extends React.Component {
     constructor(props){
         super(props);
-        this.classes = useStyles();
         this.state = { ...INITIAL_STATE };
-      }
+    }
     
     onSubmit = event => {
-        const { username, email, passwordOne } = this.state;
-        this.props.firebase
-        .doCreateUserWithEmailAndPassword(email, passwordOne)
-        .then(authUser => {
+      const { username, email, passwordOne } = this.state;
+      this.props.firebase
+          .doCreateUserWithEmailAndPassword(email, passwordOne)
+          .then(authUser => {
+            // Create a user in your Firebase realtime database
+            return this.props.firebase
+              .user(authUser.user.uid)
+              .set({
+                username,
+                email,
+              });
+          })
+          .then(() => {
             this.setState({ ...INITIAL_STATE });
             this.props.history.push(ROUTES.HOME);
-        })
-        .catch(error => {
+          })
+          .catch(error => {
             this.setState({ error });
-        });
+          });
         event.preventDefault();
-    }
+      }
 
     onChange = event => {
         this.setState({ [event.target.name]: event.target.value });
-        };
+    }
 
     render() {
         const {
@@ -104,18 +76,18 @@ class SignUpFormBase extends React.Component {
           email === '' ||
           username === '';
         return (
-        <Grid container component="main" className={this.classes.root}>
+        <Grid container component="main" className={styles.root}>
         <CssBaseline />
-        <Grid item xs={false} sm={4} md={7} className={this.classes.image} />
+        <Grid item xs={false} sm={4} md={7} className={styles.image} />
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-            <div className={this.classes.paper}>
-            <Avatar className={this.classes.avatar}>
+            <div className={styles.paper}>
+            <Avatar className={styles.avatar}>
                 <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
                 Sign in
             </Typography>
-            <form className={this.classes.form} noValidate onSubmit={this.onSubmit}>
+            <form className={styles.form} noValidate onSubmit={this.onSubmit}>
                 <TextField
                 variant="outlined"
                 margin="normal"
@@ -171,7 +143,7 @@ class SignUpFormBase extends React.Component {
                 variant="contained"
                 color="primary"
                 disabled={isInvalid}
-                className={this.classes.submit}
+                className={styles.submit}
                 >
                 Sign Up
                 </Button>
@@ -182,5 +154,11 @@ class SignUpFormBase extends React.Component {
         </Grid>);
     }
 }
+
+const SignUpForm = compose(
+  withRouter,
+  withFirebase,
+)(SignUpFormBase);
+
 
 export default SignUp;

@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import SignOut from '../SignOut/SignOut';
 
 const useStyles = makeStyles(theme => ({
     '@global': {
@@ -55,6 +56,7 @@ const Navigation = () => {
             <Button color="primary" variant="outlined" to={ROUTES.SIGN_IN} className={classes.link}>
                 Login
             </Button>
+            <SignOut />
             </Toolbar>
         </AppBar>);
 };
