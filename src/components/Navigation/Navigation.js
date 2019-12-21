@@ -32,15 +32,17 @@ const useStyles = makeStyles(theme => ({
     },
   }));
   
+const Navigation = ({ authUser }) => (
+  <div>{authUser ? <NavigationAuth /> : <NavigationNonAuth />}</div>
+);
 
-const Navigation = () => {
+const NavigationAuth = () => {
     const classes = useStyles();
 
     return(  
         <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
             <Toolbar className={classes.toolbar}>
             <Typography variant="h6" color="inherit" noWrap className={classes.toolbarTitle}>
-                Company name
             </Typography>
             <nav>
                 <Link variant="button" color="textPrimary" to={ROUTES.HOME}>
@@ -53,11 +55,26 @@ const Navigation = () => {
                 Admin
                 </Link>
             </nav>
-            <Button color="primary" variant="outlined" to={ROUTES.SIGN_IN} className={classes.link}>
-                Login
-            </Button>
             <SignOut />
             </Toolbar>
         </AppBar>);
+};
+
+const NavigationNonAuth = () => {
+  const classes = useStyles();
+
+  return(  
+      <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
+          <Toolbar className={classes.toolbar}>
+          <Typography variant="h6" color="inherit" noWrap className={classes.toolbarTitle}>
+          </Typography>
+          <Button color="primary" variant="outlined" to={ROUTES.SIGN_IN} className={classes.link}>
+              Sign In
+          </Button>
+          <Button color="primary" variant="outlined" to={ROUTES.SIGN_UP} className={classes.link}>
+              Sign Up
+          </Button>
+          </Toolbar>
+      </AppBar>);
 };
 export default Navigation;

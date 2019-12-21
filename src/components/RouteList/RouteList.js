@@ -1,7 +1,9 @@
 import React from 'react';
 import { withFirebase } from '../Firebase/context';
 import Button from '@material-ui/core/Button';
-
+import MapIcon from '@material-ui/icons/Map';
+import { List, ListItem, ListItemIcon, ListItemText  } from '@material-ui/core';
+import NewRoute from '../NewRoute/NewRoute';
 
 class RouteList extends React.Component {
     constructor(props) {
@@ -12,6 +14,14 @@ class RouteList extends React.Component {
         };
     }
     componentDidMount() {
+        this.updateRoutes();
+    }
+
+    componentWillUnmount() {
+        this.props.firebase.routes().off();
+    }
+
+    updateRoutes() {
         this.setState({ loading: true });
         this.props.firebase.routes().on('value', snapshot => {
             const routesObject = snapshot.val();
@@ -26,15 +36,11 @@ class RouteList extends React.Component {
         });
     }
 
-    componentWillUnmount() {
-        this.props.firebase.routes().off();
-    }
-
-    createRoute = () => {
+    createRoute = (name) => {
         let uniqueId = Math.random().toString(36).substring(2) + Date.now().toString(36);
         let route = {
             id: uniqueId,
-            name: 'test route'
+            name: name
         }
         this.props.firebase.addRoute(route).then(result => {
             console.log(result);
@@ -44,24 +50,21 @@ class RouteList extends React.Component {
         const { routes, loading } = this.state;
         return (
         <div>
-            <Button onClick={this.createRoute} >
-               + Route
-            </Button>
-            <h1>Routes</h1>
+            <h3>Routes</h3>
+            <NewRoute addRoute={this.createRoute} />
             {loading ||      
-                <ul>
+                <List component="nav" aria-label="contacts">
                     {
                         routes.map(route => (
-                        <li key={route.id}>
-                        <span>
-                            <strong>ID:</strong> {route.id}
-                        </span>
-                        <span>
-                            <strong>Name:</strong> {route.name}
-                        </span>
-                        </li>
+                        <ListItem button key={route.id}>
+                            <ListItemIcon>
+                            <MapIcon />
+                            </ListItemIcon>
+                            <ListItemText primary={route.name} />
+                        </ListItem>
                     ))}
-                </ul>}
+                </List>
+            }
         </div>
         );
     }

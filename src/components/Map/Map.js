@@ -1,100 +1,49 @@
 import React from 'react';
-import ReactMapGL, {Marker, NavigationControl} from 'react-map-gl';
-import ControlPanel from './CintrolPanel';
-import Pin from './Pin';
+import { Map, GoogleApiWrapper,  Marker } from 'google-maps-react';
 
-const navStyle = {
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  padding: '10px'
+const mapStyles = {
+  width: '100%',
+  height: '100%',
 };
 
-class Map extends React.Component {
+class MapContainer extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      viewport: {
-        latitude: 37.785164,
-        longitude: -100,
-        zoom: 3.5,
-        bearing: 0,
-        pitch: 0
-      },
-      marker: {
-        latitude: 37.785164,
-        longitude: -100
-      },
-      events: {}
-    };
+      stores: [{lat: 47.49855629475769, lng: -122.14184416996333},
+              {latitude: 47.359423, longitude: -122.021071},
+              {latitude: 47.2052192687988, longitude: -121.988426208496},
+              {latitude: 47.6307081, longitude: -122.1434325},
+              {latitude: 47.3084488, longitude: -122.2140121},
+              {latitude: 47.5524695, longitude: -122.0425407}]
+    }
   }
 
-  _updateViewport = viewport => {
-    this.setState({viewport});
-  };
-
-  _logDragEvent(name, event) {
-    this.setState({
-      events: {
-        ...this.state.events,
-        [name]: event.lngLat
-      }
-    });
+  displayMarkers = () => {
+    return this.state.stores.map((store, index) => {
+      return <Marker key={index} id={index} position={{
+       lat: store.latitude,
+       lng: store.longitude
+     }}
+     onClick={() => console.log("You clicked me!")} />
+    })
   }
-
-  _onMarkerDragStart = event => {
-    this._logDragEvent('onDragStart', event);
-  };
-
-  _onMarkerDrag = event => {
-    this._logDragEvent('onDrag', event);
-  };
-
-  _onMarkerDragEnd = event => {
-    this._logDragEvent('onDragEnd', event);
-    this.setState({
-      marker: {
-        longitude: event.lngLat[0],
-        latitude: event.lngLat[1]
-      }
-    });
-  };
 
   render() {
-    const {viewport, marker} = this.state;
     return (
-      <ReactMapGL
-        mapboxApiAccessToken="pk.eyJ1IjoieXVsaWlhLXNocGFrIiwiYSI6ImNrNDF1YmZqNjA0cWMza2trd2U3NjVpejQifQ.MlVYvRDk9T4wKoFEzrOkZg"
-        {...viewport}
-        width="100%"
-        height="100%"
-        mapStyle="mapbox://styles/mapbox/dark-v9"
-        onViewportChange={this._updateViewport}
-      >
-        <Marker
-          longitude={marker.longitude}
-          latitude={marker.latitude}
-          offsetTop={-20}
-          offsetLeft={-10}
-          draggable
-          onDragStart={this._onMarkerDragStart}
-          onDrag={this._onMarkerDrag}
-          onDragEnd={this._onMarkerDragEnd}
+        <Map
+          google={this.props.google}
+          zoom={8}
+          style={mapStyles}
+          initialCenter={{ lat: 47.444, lng: -122.176}}
         >
-          <Pin size={20} />
-        </Marker>
-
-        <div className="nav" style={navStyle}>
-          <NavigationControl onViewportChange={this._updateViewport} />
-        </div>
-
-        <ControlPanel
-          containerComponent={this.props.containerComponent}
-          events={this.state.events}
-        />
-      </ReactMapGL>
+          {this.displayMarkers()}
+        </Map>
     );
   }
 }
 
-export default Map;
+export default GoogleApiWrapper({
+  apiKey: ''
+})(MapContainer);
