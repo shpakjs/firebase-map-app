@@ -1,12 +1,22 @@
 import React, { useState, useRef } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Map from '../Map/Map';
 
+const useStyles = makeStyles({
+    dialog: {
+      width: '60%',
+      color: '60vh',
+    },
+});
+  
 export default function NewRoute(props) {
+  const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const inputEl = useRef(null);
   
@@ -29,9 +39,9 @@ export default function NewRoute(props) {
       <Button color="primary" onClick={handleClickOpen}>
         + Route
       </Button>
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" >
         <DialogTitle id="form-dialog-title">New Route</DialogTitle>
-        <DialogContent>
+        <DialogContent >
           <TextField
             autoFocus
             margin="dense"
@@ -41,6 +51,7 @@ export default function NewRoute(props) {
             ref={inputEl}
             fullWidth
           />
+          <Map />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
